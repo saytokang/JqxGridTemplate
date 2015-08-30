@@ -31,20 +31,40 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value="/call.do") 
-	public String dbcall(@RequestParam Map<String, String> params) {
+	@RequestMapping(value="/list.do", method=RequestMethod.GET) 
+	public String getList(@RequestParam Map<String, String> params) {
 		return "db_call";
 	}
 	
-	
+	/**
+	 * ajax list call
+	 * @param params
+	 * @return
+	 */
 	@RequestMapping(value="/list.do", method=RequestMethod.POST)
 	@ResponseBody
-	public List<Map<String, Object>> list(@RequestParam Map<String, String> params) {
-		System.out.println(params);
+	public List<Map<String, Object>> postList(@RequestParam Map<String, String> params) {
 		List<Map<String, Object>> list = postService.getList(params);
-		System.out.println("size:" +list.size());
-		
 		return list;
 	}
+	
+	@RequestMapping(value="/crud.do", method=RequestMethod.GET) 
+	public String getCrud(@RequestParam Map<String, String> params) {
+		return "crud";
+	}
+	
+	/**
+	 * ajax list call
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping(value="/crud.do", method=RequestMethod.POST)
+	@ResponseBody
+	public List<Map<String, Object>> postCrud(@RequestParam Map<String, String> params) {
+		System.out.println(params);
+		List<Map<String, Object>> list = postService.getList(params);
+		return list;
+	}
+	
 	
 }

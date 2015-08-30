@@ -48,11 +48,39 @@ var JQXW = (function() {
             autoheight: true,
             columnsresize: true,
             columnsreorder: true,
-            filterable: true
+            filterable: true,
+            selectionmode: 'singlerow'
         });        
     };
+    
+    var addrow = function(url, rowid, rowdata, position, commit, datecols) {
+        if($.isArray(datecols)) {
+        	var data = $.extend({}, rowdata);
+        	$.each(datecols, function(i,v){ 
+        		data[v] = $.jqx.formatDate(rowdata[v], 'yyyy-MM-dd');
+        	});
+        }
+        
+        $.ajax({
+            url: url,
+            data: data,
+            type: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                var newRowId = data != undefined ? parseInt(data) : 0
+                if (!newRowId)
+                    commit(false);
+                else
+                    commit(true, newRowId);                         
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                commit(false);
+            }
+        });
+    };
+    
     return {
         init: gridInit,
-        loadData : jqxLoad
+        loadData: jqxLoad,
+        addrow: addrow
     }
 })();
