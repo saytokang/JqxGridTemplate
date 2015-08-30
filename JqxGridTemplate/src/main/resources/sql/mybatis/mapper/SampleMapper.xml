@@ -39,6 +39,11 @@
 	</insert>
 	
 	<select id="postList" resultType="map">
-		select zipcode, sido, gu, dong, jibun, etc from post
+		select zipcode, sido, gu, dong, jibun, etc 
+		from post
+		where 1=1
+		<if test="sido != null and sido != ''">
+		  and sido like concat(#{sido},'%')
+		</if>
 	</select>
 </mapper>

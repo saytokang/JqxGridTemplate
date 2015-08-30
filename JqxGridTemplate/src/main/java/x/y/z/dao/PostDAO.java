@@ -12,8 +12,8 @@ public class PostDAO {
 	@Autowired
 	SqlSessionTemplate sqlSession;
 
-	public List<Map<String, Object>> getList() {
-		return sqlSession.selectList("sample.postList");
+	public List<Map<String, Object>> getList(Map<String, String> params) {
+		return sqlSession.selectList("sample.postList", params);
 	}
 	
 }

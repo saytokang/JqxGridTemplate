@@ -15,9 +15,9 @@ public class PostServiceImpl implements PostService {
 	PostDAO postDAO;
 	
 	@Override
-	public List<Map<String, Object>> getList() {
+	public List<Map<String, Object>> getList(Map<String, String> params) {
 		
-		return postDAO.getList();
+		return postDAO.getList(params);
 	}
 
 }

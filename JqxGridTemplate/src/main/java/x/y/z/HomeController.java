@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import x.y.z.service.PostService;
@@ -23,21 +25,23 @@ public class HomeController {
 	@Autowired
 	PostService postService;
 
-	@RequestMapping(value="/") 
+	@RequestMapping(value="/index.do") 
 	public String home() {
+		System.out.println("call home");
 		return "home";
 	}
 
 	@RequestMapping(value="/call.do") 
-	public String dbcall() {
+	public String dbcall(@RequestParam Map<String, String> params) {
 		return "db_call";
 	}
 	
 	
-	@RequestMapping(value="/list.do")
+	@RequestMapping(value="/list.do", method=RequestMethod.POST)
 	@ResponseBody
-	public List<Map<String, Object>> list() {
-		List<Map<String, Object>> list = postService.getList();
+	public List<Map<String, Object>> list(@RequestParam Map<String, String> params) {
+		System.out.println(params);
+		List<Map<String, Object>> list = postService.getList(params);
 		System.out.println("size:" +list.size());
 		
 		return list;

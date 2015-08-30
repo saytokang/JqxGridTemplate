@@ -19,61 +19,43 @@
     <script type="text/javascript" src="/jqwidgets/jqxgrid.pager.js"></script>
     <script type="text/javascript" src="/jqwidgets/jqxlistbox.js"></script>
     <script type="text/javascript" src="/jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxgrid.columnsresize.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxgrid.columnsreorder.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxgrid.filter.js"></script>
+
+    <script type="text/javascript" src="/scripts/co_util.js"></script>
+
     <script type="text/javascript">
+
+    function initGrid() {
+        var tx_cols = ['우편번호','시도', '구/군', '동', '지번','상세내용'];
+        var db_cols = ['zipcode', 'sido', 'gu', 'dong', 'jibun','etc'];
+        JQXW.init(tx_cols, db_cols);
+    }
+
     $().ready(function(){
+        initGrid();
+
         $('#btn').click(function(){
-            var source = {
-                datatype: "json",
-                datafields: [{name: 'zipcode', type: 'string'}, 
-                             {name: 'sido', type: 'string'}, 
-                             {name: 'gu',type: 'string'}, 
-                             {name: 'dong',type: 'string'},
-                             {name: 'jibun',type: 'string'},
-                             {name: 'etc',type: 'string'}
-                            ],
-                id: 'zipcode',
-                url: 'list.do',
-                async: true
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-
-            var pagerrenderer = function () {
-                var element = $("<div style='margin-top: 5px; width: 100%; height: 100%;'></div>");
-                var paginginfo = $("#jqxgrid").jqxGrid('getpaginginformation');
-                for (i = 0; i < paginginfo.pagescount; i++) {
-                    // add anchor tag with the page number for each page.
-                    var anchor = $("<a style='padding: 5px;' href='#" + i + "'>" + i + "</a>");
-                    anchor.appendTo(element);
-                    anchor.click(function (event) {
-                        // go to a page.
-                        var pagenum = parseInt($(event.target).text());
-                        $("#jqxgrid").jqxGrid('gotopage', pagenum);
-                    });
-                }
-                return element;
+            search();
+        });
+        $('#sido').keypress(function(event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == 13) {
+                search();
             }
-
-            $("#jqxgrid").jqxGrid({
-                width: 850,
-                source: dataAdapter,
-                pageable: true,
-                autoheight: true,
-              //  pagerrenderer: pagerrenderer,
-                columns: [
-                  { text: '우편번호', datafield: 'zipcode', width: 100 },
-                  { text: '시도', datafield: 'sido', width: 100 },
-                  { text: '구/군', datafield: 'gu', width: 100 },
-                  { text: '동', datafield: 'dong', width: 100, cellsalign: 'right' },
-                  { text: '지번', datafield: 'jibun', width: 200, cellsalign: 'right'},
-                  { text: '세부사항', datafield: 'etc', cellsalign: 'right'}
-                ]
-            });
         });
     });
+
+    function search() {
+        var url = 'list.do';
+        var params = {sido: $('#sido').val()};
+        JQXW.loadData('jqxgrid', url, params);
+    }
     </script>
 </head>
 <body class='default'>
-    <button id="btn">조회</button>
+    <input type="text" id="sido" name="sido" /><button id="btn">조회</button>
     <div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
         <div id="jqxgrid"></div>
     </div>
