@@ -31,6 +31,7 @@
         var tx_cols = ['우편번호','시도', '구/군', '동', '지번','상세내용'];
         var db_cols = ['zipcode', 'sido', 'gu', 'dong', 'jibun','etc'];
         JQXW.init(tx_cols, db_cols);
+        JQXW.loadData('jqxgrid', null, null);
     }
 
     $().ready(function(){
