@@ -23,36 +23,32 @@
     <script type="text/javascript" src="/jqwidgets/jqxgrid.columnsreorder.js"></script>
     <script type="text/javascript" src="/jqwidgets/jqxgrid.filter.js"></script>
     <script type="text/javascript" src="/jqwidgets/jqxgrid.edit.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxcheckbox.js"></script>
 
     <script type="text/javascript" src="/scripts/co_util.js"></script>
 
     <script type="text/javascript">
 
     function initGrid() {
+        var jqx = $('#jqxgrid');
         var tx_cols = ['우편번호','시도', '구/군', '동', '지번','상세내용'];
         var db_cols = ['zipcode', 'sido', 'gu', 'dong', 'jibun','etc'];
         JQXW.init(tx_cols, db_cols);
-        JQXW.loadData('jqxgrid', null, null);
-        gridTool();
+        JQXW.loadData(jqx, null, null);
+        gridToolbox(jqx);
 
-        function gridTool(){
-            var jg1 = $("#jqxgrid");
+        function gridToolbox(jqx){
             $('#newRow').click(function() {
-                jg1.jqxGrid({editable: true});
-                jg1.jqxGrid('addrow', null, {});
+                JQXW.addrow(jqx);
             });
            $('#editRow').click(function() {
-                jg1.jqxGrid({editable: true});
+                jqx.jqxGrid({editable: true});
             });  
            $('#delRow').click(function() {
-                jg1.jqxGrid({editable: false});
-                var id = jg1.jqxGrid('getselectedrowindex');
-                console.log('=>' + id);
-                jg1.jqxGrid('deleterow', id);
-                jg1.jqxGrid('refresh');
+                JQXW.delrow(jqx);
             });                        
             $('#save').click(function() {
-                jg1.jqxGrid({editable: false});
+                jqx.jqxGrid({editable: false});
                 alert('saved');
             });            
         }   
@@ -61,7 +57,6 @@
             var datecols = null;
             JQXW.addrow(url, rowid, rowdata, position, commit, datecols);
         }
-         
     }
 
     $().ready(function(){

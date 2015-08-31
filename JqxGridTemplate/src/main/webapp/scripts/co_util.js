@@ -22,8 +22,8 @@ var JQXW = (function() {
     var _fields, _columns;
 
     var gridInit = function(tx_cols, db_cols) {
-        _fields = $.map(db_cols, function(v){return {name:v, type:'string'}});
-        _columns = $.map(db_cols, function(v,i){return {text: tx_cols[i], datafield:v, width: Math.floor(100/tx_cols.length)+'%', cellsalign:'right'}});
+        _fields = $.map(db_cols, function(v){return {name: v, type: 'string'}});
+        _columns = $.map(db_cols, function(v,i){return {text: tx_cols[i], datafield: v, width: Math.floor(100/tx_cols.length)+'%', cellsalign:'right'}});
     };
 
     var jqxDataSource = function(url, params) {
@@ -38,9 +38,9 @@ var JQXW = (function() {
         return source; 
     };
 
-    var jqxLoad = function(jqxid, url, params) {
-        $('#'+jqxid).jqxGrid('clear');
-        $('#'+jqxid).jqxGrid({
+    var jqxLoad = function(jqx, url, params) {
+        jqx.jqxGrid('clear');
+        jqx.jqxGrid({
             source: new $.jqx.dataAdapter(jqxDataSource(url, params)),
             columns : _columns,
             width: '99%',
@@ -49,11 +49,11 @@ var JQXW = (function() {
             columnsresize: true,
             columnsreorder: true,
             filterable: true,
-            selectionmode: 'singlerow'
+            selectionmode: 'checkbox'
         });        
     };
     
-    var addrow = function(url, rowid, rowdata, position, commit, datecols) {
+    var addrowandsave = function(url, rowid, rowdata, position, commit, datecols) {
         if($.isArray(datecols)) {
         	var data = $.extend({}, rowdata);
         	$.each(datecols, function(i,v){ 
@@ -78,9 +78,21 @@ var JQXW = (function() {
         });
     };
     
+    var deleterow = function(jqx) {
+    	jqx.jqxGrid({editable: false});
+        var selectedrowindex = jqx.jqxGrid('getselectedrowindex');
+        var id = jqx.jqxGrid('getrowid', selectedrowindex);
+        jqx.jqxGrid('deleterow', id);
+    };
+    
+    var addrow = function (jqx) {
+    	jqx.jqxGrid({editable: true});
+        jqx.jqxGrid('addrow', null, {}, 'first');
+    }
     return {
         init: gridInit,
         loadData: jqxLoad,
-        addrow: addrow
+        addrow: addrow,
+        delrow: deleterow
     }
 })();
